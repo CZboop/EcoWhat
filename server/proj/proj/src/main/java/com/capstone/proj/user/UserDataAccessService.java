@@ -97,6 +97,14 @@ public class UserDataAccessService implements UserDAO{
                 .findFirst();
     }
 
+//    for timeout before contacting mps again
+    public void addContactTimeForUser(int id, String time){
+        String sql = """
+                UPDATE users SET last_contacted = ? WHERE id = ?;
+                """;
+        jdbcTemplate.update(sql, time, id);
+    }
+
     // old methods that don't coincide with token based authentication
 //    @Override
 //    public int updateUserToken(User user) {

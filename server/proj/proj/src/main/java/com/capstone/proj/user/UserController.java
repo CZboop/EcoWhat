@@ -62,6 +62,11 @@ public class UserController {
         userService.logOut(token);
     }
 
+    @PostMapping("/contacted/{id}")
+    public void addContactTimeForUser(@PathVariable int id, @RequestBody String time){
+        userService.addContactTimeForUser(id, time);
+    }
+
     // old methods that don't coincide with token based authentication
 //    @PostMapping("user")
 //    public Optional<User> findByToken(@RequestBody String token) {
