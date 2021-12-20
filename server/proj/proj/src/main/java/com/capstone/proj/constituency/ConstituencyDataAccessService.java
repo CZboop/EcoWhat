@@ -1,5 +1,8 @@
 package com.capstone.proj.constituency;
 
+import com.capstone.proj.comment.Comment;
+import com.capstone.proj.comment.CommentRowMapper;
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -58,6 +61,7 @@ public class ConstituencyDataAccessService implements ConstituencyDAO{
         return allConstituencies;
     };
 
+    @Override
     public String getConstituencyNameFromId(int constituency_id){
         String sql = """
                 SELECT constituency_name FROM constituencies WHERE constituency_id =  ?;
@@ -65,12 +69,23 @@ public class ConstituencyDataAccessService implements ConstituencyDAO{
         return jdbcTemplate.queryForObject(sql, new Object[] {constituency_id}, String.class);
     };
 
+    @Override
     public Integer getConstituencyIdFromName(String name){
         String sql = """
                 SELECT constituency_id FROM constituencies WHERE constituency_name LIKE ?;
                 """;
 
         return jdbcTemplate.queryForObject(sql, new Object[]{name}, Integer.class);
+    }
+
+    @Override
+    public List<Constituency> getConstituenciesWithNoMp(){
+        String sql = """
+                SELECT constituencies.constituency_id, constituencies.constituency_name FROM constituencies JOIN mps 
+                ON (constituencies.constituency_id = mps.constituency_id) WHERE mps.name IS NULL;
+                """;
+        List<Constituency> constituencies = jdbcTemplate.query(sql, new ConstituencyRowMapper());
+        return constituencies;
     }
 
 }

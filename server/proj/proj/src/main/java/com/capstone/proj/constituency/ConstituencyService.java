@@ -102,4 +102,11 @@ public class ConstituencyService {
         return constituencyDAO.getConstituencyIdFromName(name);
     }
 
+    public List<String> getConstituenciesWithNoMp() {
+        List<String> listOfNames = new ArrayList<>();
+        for (Constituency constituency : constituencyDAO.getConstituenciesWithNoMp()) {
+            listOfNames.add(constituency.getConstituency_name());
+        }
+        return listOfNames;
+    }
 }

@@ -14,6 +14,7 @@ const MP = ({ mpData, mpVotes, user, token, contacted, setContacted }) => {
     const [open, setOpen] = useState(false);
 
     const evaluateLastContact = () => {
+        if (token){
         fetch("http://localhost:8080/api/users/lastcontact/" + token.userId)
         .then(response => response.text())
         .then(data => {
@@ -26,6 +27,7 @@ const MP = ({ mpData, mpVotes, user, token, contacted, setContacted }) => {
         })
         // timeout is 3 days here, can always increase or decrease this
         .then(days => days > 3 ? setContacted(false) : setContacted(true))
+    }
         
     }
 
