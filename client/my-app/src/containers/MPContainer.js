@@ -4,7 +4,7 @@ import EnvironmentalData from '../components/mp/EnvironmentalData';
 import CommentsList from "../components/comments/CommentsList"
 import CommentForm from '../components/comments/CommentForm';
 
-const MPContainer = ({ currentConstituency, token }) => {
+const MPContainer = ({ currentConstituency, token, contacted, setContacted }) => {
     const [mpData, setMpData] = useState("");
     const [mpVotesCarbon, setMpVotesCarbon] = useState([]);
     const [mpVotesClimate, setMpVotesClimate] = useState([]);
@@ -181,7 +181,7 @@ const MPContainer = ({ currentConstituency, token }) => {
         mpData !== "" ?
         <section className='mp-container'>   
             <MP mpData={mpData} mpVotes={[...mpVotesCarbon, ...mpVotesClimate, ...mpVotesEvironment, ...mpVotesEnergy]} 
-                 envData={envData}/>
+                 envData={envData} token={token} contacted={contacted} setContacted={setContacted}/>
             <EnvironmentalData envData={envData}/>
             <section className="comments-section">
             <CommentForm getComments={getComments} token={token} currentConstituency={currentConstituency} />

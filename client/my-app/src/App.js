@@ -20,7 +20,10 @@ function getSessionStorageOrDefault(key, defaultValue) {
 }
 
 function App() {
-  
+
+  const [contacted, setContacted] = useState(
+    getSessionStorageOrDefault("contacted", false)
+  );
 
   const [currentConstituency, setCurrentConstituency] = useState(
     getSessionStorageOrDefault("currentConstituency", null)
@@ -33,7 +36,8 @@ function App() {
   useEffect(() => {
     sessionStorage.setItem('token', JSON.stringify(token))
     sessionStorage.setItem("currentConstituency", JSON.stringify(currentConstituency))
-  }, [token, currentConstituency])
+    sessionStorage.setItem("contacted", JSON.stringify(contacted))
+  }, [token, currentConstituency, contacted])
 
   const onLogin = (token) => {
     setToken(token)
@@ -78,7 +82,7 @@ function App() {
           <Route path="/about" element={<About /> } /> 
           <Route path="/youhelp" element={<YouHelp token={token} />} /> 
           {/* <Route path={`/constituency/${currentConstituency.constituency_id}`} element={<MPContainer currentConstituency={currentConstituency}/>}/> */}
-          <Route path="/constituency/current" element={<MPContainer token={token} currentConstituency={currentConstituency} />} />
+          <Route path="/constituency/current" element={<MPContainer token={token} currentConstituency={currentConstituency} contacted={contacted} setContacted={setContacted}/>} />
         </Routes>
       </BrowserRouter>
     </>

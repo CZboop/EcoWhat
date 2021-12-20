@@ -23,22 +23,22 @@ public class DataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        countyService.dropCountyTable();
-        constituencyService.dropConstituencyTable();
-
-        mpService.dropMpTable();
-
-        countyService.createCountyTable();
-        constituencyService.createConstituencyTable();
-
-        mpService.createMpTable();
-
-        countyService.addAllCountyNames();
-        countyService.addCountyConstituencies();
-        countyService.addDataNotInAPI();
-        constituencyService.addAllConstituencies();
-
-        mpService.addMps();
+//        countyService.dropCountyTable();
+//        constituencyService.dropConstituencyTable();
+//
+//        mpService.dropMpTable();
+//
+//        countyService.createCountyTable();
+//        constituencyService.createConstituencyTable();
+//
+//        mpService.createMpTable();
+//
+//        countyService.addAllCountyNames();
+//        countyService.addCountyConstituencies();
+//        countyService.addDataNotInAPI();
+//        constituencyService.addAllConstituencies();
+//
+//        mpService.addMps();
         System.out.println("Application runner complete");
     }
 }
