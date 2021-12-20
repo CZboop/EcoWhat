@@ -4,12 +4,19 @@ import 'leaflet/dist/leaflet.css';
 import './Home.css';
 import SearchBar from '../components/home/SearchBar';
 import { useNavigate } from 'react-router-dom';
-import { useState, useLayoutEffect } from 'react';
+import { useState, useLayoutEffect, useEffect } from 'react';
 
 const Home = ({ token, currentConstituency, setCurrentConstituency }) => {
     const [windowSize, setWindowSize] = useState([window.innerWidth, window.innerHeight]);
     const [mapZoom, setZoom] = useState(7);
     const [mapCenter, setMapCenter] = useState([53,0]);
+    const [noMp, setNoMp] = useState([]);
+
+    const getNoMp = () => {
+        fetch("http://localhost:8080/api/constituencies/nomp")
+        .then(response => response.json())
+        .then(data => setNoMp(data))
+    }
 
     useLayoutEffect(() => {
         function updateSize() {
@@ -29,6 +36,10 @@ const Home = ({ token, currentConstituency, setCurrentConstituency }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     console.log(windowSize);
+
+    useEffect(() => {
+        getNoMp();
+    }, [])
     
 
     const navigate = useNavigate();
@@ -47,13 +58,23 @@ const Home = ({ token, currentConstituency, setCurrentConstituency }) => {
 
         layer.on({
             click: (event) => {
-                fetch("https://members-api.parliament.uk/api/Location/Constituency/Search?searchText=" + 
+                fetch("http://localhost:8080/api/constituencies/nomp")
+                .then(response => response.json())
+                .then(data => {
+                    if (data.includes(event.target.feature.properties.PCON13NM)){
+                        alert("This constituency currently has no MP. Functionality will return once it has a new one, so check back soon")
+                    }
+                    else{
+                        fetch("https://members-api.parliament.uk/api/Location/Constituency/Search?searchText=" + 
                 event.target.feature.properties.PCON13NM)
                 .then(response => response.json())
                 .then(data => data.items[0].value.id)
                 .then(data => setCurrentConstituency({constituency_id: data,
                     constituency_name: event.target.feature.properties.PCON13NM}))
                     .then(()=>navigate('/constituency/current'))
+                    }
+                })
+                
                 
             },
             mouseover: (event) => {
@@ -86,7 +107,7 @@ const Home = ({ token, currentConstituency, setCurrentConstituency }) => {
             </section>
 
             <h2 className='header'>Find your constituency. Understand your MPs stance on climate change. Have your say.</h2>
-            <SearchBar setCurrentConstituency={setCurrentConstituency}/>
+            <SearchBar setCurrentConstituency={setCurrentConstituency} noMp={noMp}/>
 
             <MapContainer key={mapZoom} className="map-container" style={{height: "80vh", width: "95vw"}} 
             zoom={mapZoom} scrollWheelZoom={false} center={mapCenter}>

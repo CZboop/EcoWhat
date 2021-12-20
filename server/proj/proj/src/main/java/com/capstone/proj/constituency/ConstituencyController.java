@@ -40,4 +40,9 @@ public class ConstituencyController {
             return constituencyService.getConstituencyFromPostcode(postcode);
     }
 
+    @GetMapping("/nomp")
+    public List<String> getConstituenciesWithNoMp(){
+        return constituencyService.getConstituenciesWithNoMp();
+    }
+
 }

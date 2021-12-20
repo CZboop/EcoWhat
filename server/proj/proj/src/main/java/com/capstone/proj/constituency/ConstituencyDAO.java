@@ -18,4 +18,6 @@ public interface ConstituencyDAO {
     public String getConstituencyNameFromId(int constituency_id);
 
     public Integer getConstituencyIdFromName(String name);
+
+    public List<Constituency> getConstituenciesWithNoMp();
 }

@@ -22,16 +22,23 @@ function SearchBar({setCurrentConstituency}) {
                     return response.json().then(err => {throw new Error(err.message)})
                 }
                 return response.json()})
+                .catch(err => {
+                    console.log(err)
+                    alert("Please enter a valid postcode");
+                })
             .then(data =>{
                 console.log(data)
+                fetch("http://localhost:8080/api/constituencies/nomp")
+                .then(response => response.json())
+                .then(response => {
+                    if (response.includes(data.constituency_name)){
+                        alert("This constituency currently has no MP. Functionality will return once it has a new one, so check back soon")
+                    }
+                    else{
                 setCurrentConstituency(data)
-                
-            }).then(()=>navigate('/constituency/current'))
-            .catch(err => {
-                console.log(err)
-                alert("Please enter a valid postcode");
-            })
-        }
+                navigate('/constituency/current')
+            }
+        })})}
     
 
     return (
@@ -43,6 +50,6 @@ function SearchBar({setCurrentConstituency}) {
             </form>
         </div>
     )
-};
+    }
 
-export default SearchBar
+export default SearchBar;
