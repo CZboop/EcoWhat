@@ -5,7 +5,7 @@ import "../../App.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
-import {useState} from "react";
+import {useState, useEffect} from "react";
 
 const MP = ({ mpData, mpVotes, user, token, contacted, setContacted }) => {
 
@@ -13,8 +13,37 @@ const MP = ({ mpData, mpVotes, user, token, contacted, setContacted }) => {
     const emailText = `Dear ${mpData.name}, I am a constituent concerned about the environment, please help, From ${user==null?"your costituent": user.firstName + " " + user.latName}`;
     const [open, setOpen] = useState(false);
 
+    const evaluateLastContact = () => {
+        fetch("http://localhost:8080/api/users/lastcontact/" + token.userId)
+        .then(response => response.text())
+        .then(data => {
+            const lastContact = new Date(data.toString());
+            const now = new Date();
+            const currentDate = now.getFullYear()+'/'+(now.getMonth()+1)+'/'+now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+            const diffTime = new Date(currentDate.toString()) - lastContact;
+            const diffDays = Math.ceil(diffTime / (1000 * 3600 * 24))
+            return diffDays;            
+        })
+        // timeout is 3 days here, can always increase or decrease this
+        .then(days => days > 3 ? setContacted(false) : setContacted(true))
+        
+    }
+
+    useEffect(() => {
+        evaluateLastContact();
+    }, [])
+
     const handleContactClick = () => {
-        setContacted(true)
+        setContacted(true);
+        const today = new Date();
+        fetch("http://localhost:8080/api/users/contacted/" + token.userId, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate() + " " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
+        })
+            
     }
 
     return (
