@@ -62,9 +62,16 @@ public class UserController {
         userService.logOut(token);
     }
 
+//    methods related to when the user last contacted mp
+
     @PostMapping("/contacted/{id}")
     public void addContactTimeForUser(@PathVariable int id, @RequestBody String time){
         userService.addContactTimeForUser(id, time);
+    }
+
+    @GetMapping("/lastcontact/{id}")
+    public String getLastContactForUser(@PathVariable int id){
+        return userService.getLastContactForUser(id);
     }
 
     // old methods that don't coincide with token based authentication

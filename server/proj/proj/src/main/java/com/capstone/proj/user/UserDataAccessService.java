@@ -105,6 +105,13 @@ public class UserDataAccessService implements UserDAO{
         jdbcTemplate.update(sql, time, id);
     }
 
+    public String getLastContactForUser(int id){
+        String sql = """
+                SELECT last_contacted FROM users WHERE id = ?;
+                """;
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, String.class);
+    }
+
     // old methods that don't coincide with token based authentication
 //    @Override
 //    public int updateUserToken(User user) {

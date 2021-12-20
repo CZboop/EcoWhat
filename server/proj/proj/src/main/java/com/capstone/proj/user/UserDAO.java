@@ -21,6 +21,8 @@ public interface UserDAO {
 
     public void addContactTimeForUser(int id, String time);
 
+    public String getLastContactForUser(int id);
+
     // old methods that don't coincide with token based authentication
 //    public int updateUserToken(User user);
 //    public Optional<User> findByToken(String token);

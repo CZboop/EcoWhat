@@ -226,6 +226,10 @@ public class UserService {
         userDAO.addContactTimeForUser(id, time);
     }
 
+    public String getLastContactForUser(int id) {
+        return userDAO.getLastContactForUser(id);
+    }
+
     // old methods that don't coincide with token based authentication
 //    public Optional<User> findByToken(String token) {
 //        Optional<User> user = userDAO.findByToken(token);
